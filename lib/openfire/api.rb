@@ -75,6 +75,94 @@ module Openfire
       (request[:status_code] == 200)
     end
 
+    def get_user_roster(username)
+      raise 'not implemented'
+    end
+
+    def create_user_roster(username, roster_data={})
+      raise 'not implemented'
+    end
+
+    def delete_user_roster(username, jid)
+      raise 'not implemented'
+    end
+
+    def update_user_roster(username, jid, roster_data={})
+      raise 'not implemented'
+    end
+
+    def get_chatrooms
+      raise 'not implemented'
+    end
+
+    def get_chatroom(room_name)
+      raise 'not implemented'
+    end
+
+    def get_chatroom_participants(room_name)
+      raise 'not implemented'
+    end
+
+    def create_chatroom(room_data={})
+      raise 'not implemented'
+    end
+
+    def delete_chatroom(room_name)
+      raise 'not implemented'
+    end
+
+    def update_chatroom(room_name, room_data={})
+      raise 'not implemented'
+    end
+
+    def add_user_to_chatroom(room_name, username_or_jid, role)
+      raise 'not implemented'
+    end
+
+    def delete_user_from_chatroom(room_name, username_or_jid, role)
+      raise 'not implemented'
+    end
+
+    def get_system_properties
+      request = web_request('GET', '/system/properties', { }, default_headers)
+      request[:body]['property'].map { |x| Openfire::SystemProperty.new(x) }
+    end
+
+    def get_system_property(property_name)
+      request = web_request('GET', "/system/properties/#{property_name}", { }, default_headers)
+      Openfire::SystemProperty.new(request[:body])
+    end
+
+    def create_system_property(property_name, value)
+      payload = {
+        '@key' => property_name,
+        '@value' => value
+      }.to_json
+
+      request = web_request('POST', '/system/properties', payload, default_headers)
+      (request[:status_code] == 201)
+    end
+
+    def delete_system_property(property_name)
+      request = web_request('DELETE', "/system/properties/#{property_name}", { }, default_headers)
+      (request[:status_code] == 200)
+    end
+
+    def update_system_property(property_name, value)
+      payload = {
+        '@key' => property_name,
+        '@value' => value
+      }.to_json
+
+      request = web_request('PUT', "/system/properties/#{property_name}", payload, default_headers)
+      (request[:status_code] == 200)
+    end
+
+    def get_concurrent_sessions_count
+      request = web_request('GET', '/system/statistics/sessions', { }, default_headers)
+      Openfire::SessionsCount.new(request[:body])
+    end
+
     def get_groups
       request = web_request('GET', '/groups', { }, default_headers)
       request[:body]['group'].map { |x| Openfire::Group.new(x) }
@@ -98,6 +186,39 @@ module Openfire
     def delete_group(groupname)
       request = web_request('DELETE', "/groups/#{groupname}", { }, default_headers)
       (request[:status_code] == 200)
+    end
+
+    def get_sessions
+      request = web_request('GET', '/sessions', { }, default_headers)
+      data = request[:body]['session']
+
+      if data.is_a?(Array)
+        data.map { |x| Openfire::Session.new(x) }
+      else
+        [Openfire::Session.new(data)]
+      end
+    end
+
+    def get_user_sessions(username)
+      request = web_request('GET', "/sessions/#{username}", { }, default_headers)
+      data = request[:body]['session']
+
+      if data.is_a?(Array)
+        data.map { |x| Openfire::Session.new(x) }
+      else
+        [Openfire::Session.new(data)]
+      end
+    end
+
+    def close_user_sessions(username)
+      request = web_request('DELETE', "/sessions/#{username}", { }, default_headers)
+      (request[:status_code] == 200)
+    end
+
+    def send_broadcast_message(message_text)
+      payload = { body: message_text }.to_json
+
+      request = web_request('POST', '/messages/users', payload, default_headers)
     end
 
     private

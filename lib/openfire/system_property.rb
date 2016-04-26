@@ -1,10 +1,10 @@
 module Openfire
-  class User
-    attr_accessor :username, :name, :email, :properties
+  class SystemProperty
+    attr_accessor :key, :value
 
     def initialize(attributes={})
       attributes.each do |k,v|
-        self.send("#{to_underscore(k)}=", v)
+        self.send("#{to_underscore(k).gsub('@','')}=", v)
       end
     end
 

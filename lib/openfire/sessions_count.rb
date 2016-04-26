@@ -1,6 +1,6 @@
 module Openfire
-  class User
-    attr_accessor :username, :name, :email, :properties
+  class SessionsCount
+    attr_accessor :cluster_sessions, :local_sessions
 
     def initialize(attributes={})
       attributes.each do |k,v|
