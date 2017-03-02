@@ -9,3 +9,7 @@
 ## v0.2.1
 
 * Added optional filters to get users method
+
+## v1.0.0
+
+* Added methods to manage user roster and chatrooms.
