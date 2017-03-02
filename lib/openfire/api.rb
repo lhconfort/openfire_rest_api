@@ -5,8 +5,8 @@ module Openfire
       @access_token = access_token
     end
 
-    def get_users
-      request = web_request('GET', '/users', { }, default_headers)
+    def get_users(filters={})
+      request = web_request('GET', '/users', filters, default_headers)
       request[:body]['user'].map { |x| Openfire::User.new(x) }
     end
 

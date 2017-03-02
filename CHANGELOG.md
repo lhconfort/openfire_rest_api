@@ -5,3 +5,7 @@
 ## v0.2.0
 
 * Added methods to get sessions, system properties, send broadcast messages
+
+## v0.2.1
+
+* Added optional filters to get users method
